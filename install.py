@@ -1,10 +1,21 @@
 import os, shutil, sys
 
-applicationName = 'generic'
+class directory():
+    def __init__(self, path):
+        self.path = path
+        self.files = []
 
-configDir = os.path.expandvars('%APPDATA%\\gitBackConfig')
-installDir = os.path.expandvars('%LOCALAPPDATA%\\Programs\\gitBack')
+    def addFile(file):
+        self.files.append(file)
+
+applicationName = 'generic'
 downloadDir = os.path.dirname(os.path.realpath(__file__))
+
+directories = {
+    'config': directory(os.path.expandvars('%APPDATA%\\gitBackConfig')),
+    'install': directory(os.path.expandvars('%LOCALAPPDATA%\\Programs\\gitBack'))
+    }
+
 configFiles = []
 installFiles = ['LICENSE', 'README.md', 'gitBack.exe', 'usage.txt']
 
