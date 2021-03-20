@@ -1,0 +1,1 @@
+This is a generic PowerShell build script for my python projects and a generic installer Python installer script. build.ps1 is complete (ideally) but untested and install.py is nowhere near done.
