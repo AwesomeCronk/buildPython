@@ -1,55 +1,49 @@
 import os, shutil, sys
 
+
+applicationName = 'generic'
+installerVersion = '1.1.0'
+downloadDir = os.path.dirname(os.path.realpath(__file__))
+
 class directory():
-    def __init__(self, path):
+    def __init__(self, path, overwrite):
         self.path = path
         self.files = []
+        self.overwrite = overwrite
 
     def addFile(file):
         self.files.append(file)
 
-applicationName = 'generic'
-downloadDir = os.path.dirname(os.path.realpath(__file__))
-
 directories = {
-    'config': directory(os.path.expandvars('%APPDATA%\\gitBackConfig')),
-    'install': directory(os.path.expandvars('%LOCALAPPDATA%\\Programs\\gitBack'))
+    'desktop': directory(os.path.expandvars('%USERPROFILE%\\Desktop\\buildPython'), True)
     }
 
-configFiles = []
-installFiles = ['LICENSE', 'README.md', 'gitBack.exe', 'usage.txt']
-
-_version = '1.1.0'
+for file in ['LICENSE', 'README.md']:
+    directories['desktop'].addFile(file)
 
 def version():
-    print('Using gitBack installer version {}.'.format(_version))
+    print('Using {} installer version {}.'.format(applicationName, installerVersion))
 
 if len(sys.argv) > 1:
     if sys.argv[1] == 'version':
         version()
 else:
-    #If not, create it
-    if not os.path.exists(configDir):
-        print('Creating config directory.')
-        os.mkdir(configDir)
+    for k in list(directories.keys()):
+        print('Processing directory {}.'.format(k))
+        d = directories[k]
+        if d.overwrite:
+            #Check if %LOCALAPPDATA%\Programs\gitBack exists
+            #if so, delete it
+            if os.path.exists(d.path):
+                print('Removing directory {}.'.format(d.path))
+                shutil.rmtree(d.path)
 
-    #Check if %LOCALAPPDATA%\Programs\gitBack exists
-    #if so, delete it
-    if os.path.exists(installDir):
-        print('Removing install directory.')
-        shutil.rmtree(installDir)
+        #Create d.path
+        print('Creating directory {}.'.format(d.path))
+        os.mkdir(d.path)
 
-    #Create installDir
-    print('Creating install directory.')
-    os.mkdir(installDir)
-
-    #copy the necessary files to installDir
-    for file in configFiles:
-        print('Copying {} to {} ... '.format(file, configDir), end = '')
-        shutil.copy(file, configDir)
-        print('Done.')
-
-    for file in installFiles:
-        print('Copying {} to {} ... '.format(file, installDir), end = '')
-        shutil.copy(file, installDir)
-        print('Done.')
+        #copy the necessary files to d.path
+        for file in configFiles:
+            print('Copying {} to {} ... '.format(file, d.path), end = '')
+            shutil.copy(file, d.path)
+            print('Done.')
