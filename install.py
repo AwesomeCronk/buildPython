@@ -1,8 +1,7 @@
 import os, shutil, sys
 
-
 applicationName = 'generic'
-installerVersion = '1.1.0'
+installerVersion = '1.1.1'
 downloadDir = os.path.dirname(os.path.realpath(__file__))
 
 class directory():
@@ -11,7 +10,7 @@ class directory():
         self.files = []
         self.overwrite = overwrite
 
-    def addFile(file):
+    def addFile(self, file):
         self.files.append(file)
 
 directories = {
@@ -43,7 +42,7 @@ else:
         os.mkdir(d.path)
 
         #copy the necessary files to d.path
-        for file in configFiles:
+        for file in d.files:
             print('Copying {} to {} ... '.format(file, d.path), end = '')
             shutil.copy(file, d.path)
             print('Done.')
